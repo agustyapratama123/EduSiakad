@@ -23,9 +23,9 @@ class MahasiswaSeeder extends Seeder
 
         // Buat mahasiswa
         Mahasiswa::create([
-            'nama' => 'Mahasiswa Satu',
+            'nama' => $user->name,
             'nim' => '2023010001',
-            'email' => 'mahasiswa@example.com',
+            'email' => $user->email,
             'id_prodi' => 1,
             'tanggal_lahir' => '2003-04-15',
             'angkatan' => '2023',

@@ -12,12 +12,17 @@ return new class extends Migration
     public function up(): void
     {
          Schema::create('dosen', function (Blueprint $table) {
-            $table->id('id_dosen');
-            $table->string('nidn')->unique();
+            $table->id();
             $table->string('nama');
+            $table->string('nidn')->unique();
             $table->string('email')->unique();
-            $table->string('password');
+            $table->date('tanggal_lahir');
+            $table->string('alamat');
+            $table->string('telepon');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // Hanya untuk unsignedBigInteger
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

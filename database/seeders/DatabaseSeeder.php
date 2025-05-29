@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             ProdiSeeder::class,
             MahasiswaSeeder::class,
+            DosenSeeder::class,
         ]);
 
         $adminRole = Role::where('name', 'admin')->first();
