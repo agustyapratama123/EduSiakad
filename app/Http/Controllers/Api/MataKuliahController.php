@@ -3,16 +3,32 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\MataKuliahService;
 use Illuminate\Http\Request;
 
 class MataKuliahController extends Controller
 {
+
+    protected $mataKuliahService;
+
+    public function __construct(MataKuliahService $mataKuliahService){
+        $this->mataKuliahService = $mataKuliahService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return "okk";
+        try {
+            $result = $this->mataKuliahService->getAllData();
+        } catch (\Exception $exception) {
+            $result = [
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }
+
+        return response()->json($result,200);
     }
 
     /**
