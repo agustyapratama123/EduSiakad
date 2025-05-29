@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('mahasiswa', function (Blueprint $table) {
-            $table->id('id_mahasiswa');
+        Schema::create('mahasiswa', function (Blueprint $table) {
+            $table->id();
             $table->string('nim')->unique();
             $table->string('nama');
-            $table->foreignId('id_prodi')->constrained('prodi')->cascadeOnDelete();
+            $table->foreignId('id_prodi')->constrained('prodi')->cascadeOnDelete(); // Hanya untuk unsignedBigInteger
             $table->year('angkatan');
             $table->string('email')->unique();
             $table->string('password');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mahasiswas');
+        Schema::dropIfExists('mahasiswa');
     }
 };
