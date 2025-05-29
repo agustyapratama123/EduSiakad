@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id();
-            $table->string('nim')->unique();
             $table->string('nama');
-            $table->foreignId('id_prodi')->constrained('prodi')->cascadeOnDelete(); // Hanya untuk unsignedBigInteger
-            $table->year('angkatan');
+            $table->string('nim')->unique();
             $table->string('email')->unique();
-            $table->string('password');
+            $table->foreignId('id_prodi')->constrained('prodi')->cascadeOnDelete(); // Hanya untuk unsignedBigInteger
+            $table->date('tanggal_lahir');
+            $table->year('angkatan');
+            $table->string('alamat');
+            $table->string('telepon');
+            $table->string('user_id'); // foreign key ke tabel users
             $table->timestamps();
         });
     }

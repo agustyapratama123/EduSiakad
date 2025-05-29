@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('kode_prodi')->unique();
             $table->string('nama_prodi');
-            $table->string('fakultas');
-            $table->string('jenjang');
             $table->timestamps();
         });
     }

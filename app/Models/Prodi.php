@@ -9,4 +9,8 @@ class Prodi extends Model
 {
     /** @use HasFactory<\Database\Factories\ProdiFactory> */
     use HasFactory;
+
+    protected $table = 'prodi';
+
+    protected $fillable = ['nama_prodi', 'kode_prodi'];
 }
