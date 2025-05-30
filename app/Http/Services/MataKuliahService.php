@@ -18,7 +18,7 @@ class MataKuliahService {
     }
 
     public function getAllData(){
-        $mataKuliah = MataKuliah::all();
+        $mataKuliah = MataKuliah::paginate(20); // Atau sesuaikan per page-nya
         return MataKuliahResource::collection($mataKuliah);
     }
     
