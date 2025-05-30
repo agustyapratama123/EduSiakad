@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreMataKuliahRequest;
 use App\Http\Services\MataKuliahService;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,25 @@ class MataKuliahController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMataKuliahRequest $request)
     {
-        //
+
+        $result = ['status' => 200];
+
+        try {
+            $result['data'] = $this->mataKuliahService->setMataKuliahData($request->validated());
+        } catch (\Exception $exception) {
+            dd(get_class($exception));
+            $result=[
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }
+
+        return response()->json([
+            'message' => 'Data mata kuliah berhasil disimpan',
+            'data' => $result,
+        ]);
     }
 
     /**

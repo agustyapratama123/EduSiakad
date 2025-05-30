@@ -11,4 +11,13 @@ class MataKuliahService {
         $mataKuliah = MataKuliah::all();
         return MataKuliahResource::collection($mataKuliah);
     }
+
+    function setMataKuliahData($request) {
+        // dd($request);
+
+        $mataKuliah = MataKuliah::create($request);
+
+        return $mataKuliah;
+        
+    }
 }

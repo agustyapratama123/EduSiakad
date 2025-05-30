@@ -11,7 +11,7 @@ class StoreMataKuliahRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreMataKuliahRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'kode'      => 'required|string|unique:mata_kuliah,kode',
+            'nama'      => 'required|string|max:255',
+            'sks'       => 'required|integer|min:1',
+            'semester'  => 'required|integer|min:1',
+            'deskripsi' => 'nullable|string',
         ];
     }
 }
