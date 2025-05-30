@@ -62,7 +62,7 @@ class MataKuliahController extends Controller
      */
     public function show(string $id)
     {
-         $result = ['status' => 200];
+        $result = ['status' => 200];
 
         try {
             $result['data'] = $this->mataKuliahService->getOneData($id);
@@ -89,7 +89,24 @@ class MataKuliahController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $result = ['status' => 200];
+
+        // dd($request->all());
+        try {
+            $result['data'] = $this->mataKuliahService->updateData($id, $request);
+        }catch (\Exception $exception) {
+            $result = [
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }catch(MataKuliahNotFoundException $mataKuliahNotFoundException){
+            $result=[
+                'status' => 500,
+                'error' => $mataKuliahNotFoundException->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 
     /**
