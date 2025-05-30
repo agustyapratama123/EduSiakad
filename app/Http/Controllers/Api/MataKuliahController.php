@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\MataKuliahNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMataKuliahRequest;
 use App\Http\Services\MataKuliahService;
@@ -43,7 +44,7 @@ class MataKuliahController extends Controller
         try {
             $result['data'] = $this->mataKuliahService->setMataKuliahData($request->validated());
         } catch (\Exception $exception) {
-            dd(get_class($exception));
+            // dd(get_class($exception));
             $result=[
                 'status' => 500,
                 'error' => $exception->getMessage()
@@ -61,7 +62,26 @@ class MataKuliahController extends Controller
      */
     public function show(string $id)
     {
-        //
+         $result = ['status' => 200];
+
+        try {
+            $result['data'] = $this->mataKuliahService->getOneData($id);
+        } catch (\Exception $exception) {
+            // dd($exception->getMessage());
+            // dd(get_class($exception));
+            $result=[
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }catch(MataKuliahNotFoundException $mataKuliahNotFoundException){
+            $result=[
+                'status' => 500,
+                'error' => $mataKuliahNotFoundException->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+
     }
 
     /**
