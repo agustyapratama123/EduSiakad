@@ -91,7 +91,6 @@ class MataKuliahController extends Controller
     {
         $result = ['status' => 200];
 
-        // dd($request->all());
         try {
             $result['data'] = $this->mataKuliahService->updateData($id, $request);
         }catch (\Exception $exception) {
@@ -114,6 +113,24 @@ class MataKuliahController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $result = ['status' => 200];
+
+        try {
+            $result['data'] = $this->mataKuliahService->deleteData($id);
+        }catch (\Exception $exception) {
+            $result = [
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }catch(MataKuliahNotFoundException $mataKuliahNotFoundException){
+            $result=[
+                'status' => 500,
+                'error' => $mataKuliahNotFoundException->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+
+
     }
 }

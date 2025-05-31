@@ -62,5 +62,16 @@ class MataKuliahService {
             return new MataKuliahResource($mataKuliahUpdated);
         });
     }
+
+    function deleteData($id) {
+
+        $deleted = DB::table('mata_kuliah')->where('id', $id)->delete();
+
+        if ($deleted === 0) {
+            throw new MataKuliahNotFoundException("Mata kuliah dengan ID {$id} tidak ditemukan atau gagal dihapus.");
+        }
+
+        return "data berhasil dihapus.";
+    }
 }
 
