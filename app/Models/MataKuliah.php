@@ -19,5 +19,13 @@ class MataKuliah extends Model
         'semester',
         'deskripsi',
     ];
+    
+    // app/Models/MataKuliah.php
+
+    public function dosen()
+    {
+        return $this->belongsToMany(Dosen::class, 'dosen_mata_kuliah')
+                    ->withTimestamps();
+    }
 
 }

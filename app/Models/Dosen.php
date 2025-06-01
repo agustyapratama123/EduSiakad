@@ -27,5 +27,12 @@ class Dosen extends Model
         return $this->belongsTo(User::class);
     }
 
+// app/Models/Dosen.php
+
+    public function mataKuliah()
+    {
+        return $this->belongsToMany(MataKuliah::class, 'dosen_mata_kuliah')
+                    ->withTimestamps();
+    }
 
 }
