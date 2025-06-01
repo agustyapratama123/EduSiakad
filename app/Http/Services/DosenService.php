@@ -84,10 +84,10 @@ class DosenService {
 
     function deleteData($id) {
 
-        $deleted = DB::table('mata_kuliah')->where('id', $id)->delete();
+        $deleted = DB::table('dosen')->where('id', $id)->delete();
 
         if ($deleted === 0) {
-            throw new DosenNotFoundException("Mata kuliah dengan ID {$id} tidak ditemukan atau gagal dihapus.");
+            throw new DosenNotFoundException("dosen tidak ditemukan");
         }
 
         return "data berhasil dihapus.";
