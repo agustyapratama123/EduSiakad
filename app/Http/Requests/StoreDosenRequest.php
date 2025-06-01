@@ -6,23 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDosenRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        // Sesuaikan jika ingin membatasi siapa yang boleh membuat dosen
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'nama'           => 'required|string|max:255',
+            'nidn'           => 'required|string|unique:dosen,nidn|max:20',
+            'email'          => 'required|email|unique:dosen,email|unique:users,email',
+            'tanggal_lahir'  => 'required|date',
+            'alamat'         => 'required|string|max:255',
+            'telepon'        => 'required|string|max:20',
         ];
     }
 }

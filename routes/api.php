@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DosenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MataKuliahController;
@@ -10,4 +11,5 @@ use App\Http\Controllers\Api\MataKuliahController;
 
 
 Route::apiResource('mata-kuliah', MataKuliahController::class);
+Route::apiResource('dosen',DosenController::class);
 
