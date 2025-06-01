@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\DosenMataKuliahNotFound;
 use App\Http\Controllers\Controller;
 use App\Http\Services\DosenMataKuliahService;
 use App\Models\DosenMataKuliah;
@@ -28,6 +29,11 @@ class DosenMataKuliahController extends Controller
             $result = $this->DosenMataKuliahService->getAllData();
             
         } catch (\Exception $exception) {
+            $result = [
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        } catch(DosenMataKuliahNotFound $exception) {
             $result = [
                 'status' => 500,
                 'error' => $exception->getMessage()
