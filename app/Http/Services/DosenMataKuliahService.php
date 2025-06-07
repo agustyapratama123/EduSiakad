@@ -64,6 +64,42 @@ class DosenMataKuliahService{
         return new DosenMataKuliahResource($data);
     }
 
+    public function updateDosenMataKuliahData($id, $request)
+    {
+        // Cek apakah kombinasi dosen dan mata kuliah sudah ada pada record lain
+        $exists = DosenMataKuliah::where('dosen_id', $request['dosen_id'])
+            ->where('mata_kuliah_id', $request['mata_kuliah_id'])
+            ->where('id', '!=', $id)
+            ->exists();
+
+        if ($exists) {
+            throw new \Exception('Kombinasi dosen dan mata kuliah sudah digunakan.');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $record = DosenMataKuliah::find($id);
+
+            if (!$record) {
+                throw new \Exception("Data dengan ID $id tidak ditemukan.");
+            }
+
+            $record->update($request->only(['dosen_id', 'mata_kuliah_id']));
+
+
+            DB::commit();
+
+            return new DosenMataKuliahResource($record);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new \Exception('Gagal memperbarui data: ' . $e->getMessage());
+        }
+    }
+
+
+
+
     function deleteData($id) {
 
         $deleted = DB::table('dosen_mata_kuliah')->where('id', $id)->delete();

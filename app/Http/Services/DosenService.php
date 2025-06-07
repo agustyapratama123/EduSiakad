@@ -26,7 +26,7 @@ class DosenService {
     
     public function getOneData($id){
 
-        $dosen = $dosen = Dosen::with('user')->findOrFail($id);
+        $dosen = $dosen = Dosen::with('user')->find($id);
         
         if(!$dosen){
             throw new DosenNotFoundException('dosen not found by id '.$id);

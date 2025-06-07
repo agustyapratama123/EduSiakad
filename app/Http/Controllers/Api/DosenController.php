@@ -123,24 +123,27 @@ class DosenController extends Controller
      */
     public function destroy(string $id)
     {
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->DosenService->deleteData($id);
-        }catch (\Exception $exception) {
-            $result = [
+            $data = $this->DosenService->deleteData($id);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data dosen berhasil dihapus',
+                'data' => $data
+            ], 200);
+
+        } catch (DosenNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
                 'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }catch(DosenNotFoundException $DosenNotFoundException){
-            $result=[
-                'status' => 500,
-                'error' => $DosenNotFoundException->getMessage()
-            ];
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json($result, $result['status']);
-
-
     }
+
 }

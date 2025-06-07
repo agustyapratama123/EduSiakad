@@ -7,6 +7,8 @@ use App\Exceptions\DosenPengampuNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DosenMataKuliahRequest;
 use App\Http\Services\DosenMataKuliahService;
+use Illuminate\Http\Request;
+
 
 class DosenMataKuliahController extends Controller
 {
@@ -86,6 +88,31 @@ class DosenMataKuliahController extends Controller
             ], 500);
         }
     }
+
+    public function update(DosenMataKuliahRequest $request, string $id)
+    {
+        try {
+            $result = $this->DosenMataKuliahService->updateDosenMataKuliahData($id, $request);
+
+            return response()->json([
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
+        } catch (DosenPengampuNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
 
     public function destroy($id)
