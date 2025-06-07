@@ -22,15 +22,20 @@ class DosenController extends Controller
     public function index()
     {
         try {
-            $result = $this->DosenService->getAllData();
-        } catch (\Exception $exception) {
-            $result = [
-                'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }
+            $data = $this->DosenService->getAllData();
 
-        return response()->json($result,200);
+            return response()->json([
+                'status' => 200,
+                'data' => $data
+            ], 200);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Terjadi kesalahan saat mengambil data dosen.',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -38,74 +43,79 @@ class DosenController extends Controller
      */
     public function store(StoreDosenRequest $request)
     {
-
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->DosenService->setDosenData($request->validated());
-        } catch (\Exception $exception) {
-            // dd(get_class($exception));
-            $result=[
-                'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }
+            $data = $this->DosenService->setDosenData($request->validated());
 
-        return response()->json([
-            'message' => 'Data dosen berhasil disimpan',
-            'data' => $result,
-        ]);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data dosen berhasil disimpan',
+                'data' => $data
+            ], 200);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal menyimpan data dosen.',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->DosenService->getOneData($id);
+            $data = $this->DosenService->getOneData($id);
+
+            return response()->json([
+                'status' => 200,
+                'data' => $data
+            ], 200);
+
+        } catch (DosenNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
+            ], 404);
+
         } catch (\Exception $exception) {
-            // dd($exception->getMessage());
-            // dd(get_class($exception));
-            $result=[
+            return response()->json([
                 'status' => 500,
                 'error' => $exception->getMessage()
-            ];
-        }catch(DosenNotFoundException $DosenNotFoundException){
-            $result=[
-                'status' => 500,
-                'error' => $DosenNotFoundException->getMessage()
-            ];
+            ], 500);
         }
-
-        return response()->json($result, $result['status']);
-
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->DosenService->updateData($id, $request);
-        }catch (\Exception $exception) {
-            $result = [
+            $data = $this->DosenService->updateData($id, $request);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data dosen berhasil diperbarui',
+                'data' => $data,
+            ], 200);
+
+        } catch (DosenNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
+            ], 404);
+
+        } catch (\Exception $exception) {
+            return response()->json([
                 'status' => 500,
                 'error' => $exception->getMessage()
-            ];
-        }catch(DosenNotFoundException $DosenNotFoundException){
-            $result=[
-                'status' => 500,
-                'error' => $DosenNotFoundException->getMessage()
-            ];
+            ], 500);
         }
-
-        return response()->json($result, $result['status']);
     }
 
     /**

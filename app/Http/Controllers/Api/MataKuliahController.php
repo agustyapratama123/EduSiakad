@@ -23,114 +23,133 @@ class MataKuliahController extends Controller
     {
         try {
             $result = $this->mataKuliahService->getAllData();
+
+            return response()->json([
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
         } catch (\Exception $exception) {
-            $result = [
+            return response()->json([
                 'status' => 500,
                 'error' => $exception->getMessage()
-            ];
+            ], 500);
         }
-
-        return response()->json($result,200);
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreMataKuliahRequest $request)
     {
-
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->mataKuliahService->setMataKuliahData($request->validated());
-        } catch (\Exception $exception) {
-            // dd(get_class($exception));
-            $result=[
-                'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }
+            $data = $this->mataKuliahService->setMataKuliahData($request->validated());
 
-        return response()->json([
-            'message' => 'Data mata kuliah berhasil disimpan',
-            'data' => $result,
-        ]);
+            return response()->json([
+                'status' => 201,
+                'message' => 'Data mata kuliah berhasil disimpan',
+                'data' => $data,
+            ], 201);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Terjadi kesalahan saat menyimpan data mata kuliah.',
+                'error' => $exception->getMessage(),
+            ], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->mataKuliahService->getOneData($id);
-        } catch (\Exception $exception) {
-            // dd($exception->getMessage());
-            // dd(get_class($exception));
-            $result=[
+            $data = $this->mataKuliahService->getOneData($id);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data mata kuliah ditemukan',
+                'data' => $data,
+            ], 200);
+
+        } catch (MataKuliahNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'message' => $e->getMessage(),
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
                 'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }catch(MataKuliahNotFoundException $mataKuliahNotFoundException){
-            $result=[
-                'status' => 500,
-                'error' => $mataKuliahNotFoundException->getMessage()
-            ];
+                'message' => 'Terjadi kesalahan pada server.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json($result, $result['status']);
-
     }
 
+    // dd($exception->getMessage());
+    // dd(get_class($exception));
+    
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+   public function update(Request $request, string $id)
     {
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->mataKuliahService->updateData($id, $request);
-        }catch (\Exception $exception) {
-            $result = [
-                'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }catch(MataKuliahNotFoundException $mataKuliahNotFoundException){
-            $result=[
-                'status' => 500,
-                'error' => $mataKuliahNotFoundException->getMessage()
-            ];
-        }
+            $data = $this->mataKuliahService->updateData($id, $request);
 
-        return response()->json($result, $result['status']);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data mata kuliah berhasil diperbarui',
+                'data' => $data,
+            ], 200);
+
+        } catch (MataKuliahNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'message' => $e->getMessage(),
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Terjadi kesalahan saat memperbarui data',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+   public function destroy(string $id)
     {
-        $result = ['status' => 200];
-
         try {
-            $result['data'] = $this->mataKuliahService->deleteData($id);
-        }catch (\Exception $exception) {
-            $result = [
+            $this->mataKuliahService->deleteData($id);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data mata kuliah berhasil dihapus',
+            ], 200);
+
+        } catch (MataKuliahNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'message' => $e->getMessage(),
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
                 'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }catch(MataKuliahNotFoundException $mataKuliahNotFoundException){
-            $result=[
-                'status' => 500,
-                'error' => $mataKuliahNotFoundException->getMessage()
-            ];
+                'message' => 'Terjadi kesalahan saat menghapus data',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json($result, $result['status']);
-
-
     }
+
 }
