@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Exceptions\DosenMataKuliahNotFound;
+use App\Exceptions\DosenPengampuNotFoundException;
 use App\Http\Resources\DosenMataKuliahResource;
 use App\Models\DosenMataKuliah;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -50,5 +51,16 @@ class DosenMataKuliahService{
             // Hindari throw response langsung dalam Exception
             throw new \Exception('Gagal menyimpan data: ' . $e->getMessage());
         }
+    }
+
+    public function getOneData($id): DosenMataKuliahResource{
+
+        $data = DosenMataKuliah::with(['dosen', 'mataKuliah'])->find($id);
+
+        if (!$data) {
+            throw new DosenPengampuNotFoundException("Data dosen pengampu dengan ID {$id} tidak ditemukan.");
+        }
+
+        return new DosenMataKuliahResource($data);
     }
 }

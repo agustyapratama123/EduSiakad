@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\DosenMataKuliahNotFound;
+use App\Exceptions\DosenPengampuNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DosenMataKuliahRequest;
 use App\Http\Services\DosenMataKuliahService;
@@ -63,11 +64,23 @@ class DosenMataKuliahController extends Controller
 
     public function show($id)
     {
-        $data = DosenMataKuliah::with(['dosen', 'mataKuliah'])->findOrFail($id);
+        try{
+            $result = $this->DosenMataKuliahService->getOneData($id);
+        }catch(\Exception $exception){
+            $result = [
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }catch(DosenPengampuNotFoundException $DosenPengampuNotFoundException){
+            $result = [
+                'status' => 500,
+                'error' => $DosenPengampuNotFoundException->getMessage()
+            ];
+        }
 
         return response()->json([
             'status' => 200,
-            'data' => $data
+            'data' => $result
         ]);
     }
 
