@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\DosenMataKuliahNotFound;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DosenMataKuliahRequest;
 use App\Http\Services\DosenMataKuliahService;
 use App\Models\DosenMataKuliah;
 use App\Models\Dosen;
@@ -45,22 +46,19 @@ class DosenMataKuliahController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(DosenMataKuliahRequest $request)
     {
-        $validated = $request->validate([
-            'dosen_id' => 'required|exists:dosen,id',
-            'mata_kuliah_id' => 'required|exists:mata_kuliah,id',
-            'kelas' => 'nullable|string|max:50',
-            'tahun_ajaran' => 'nullable|string|max:20',
-        ]);
+        try{
+            $result = $this->DosenMataKuliahService->setDosenMataKuliahData($request);
+        }catch(\Exception $exception){
+            $result = [
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ];
+        }
 
-        $data = DosenMataKuliah::create($validated);
+        return response()->json($result,200);
 
-        return response()->json([
-            'status' => 201,
-            'message' => 'Data dosen pengampu berhasil disimpan',
-            'data' => $data
-        ]);
     }
 
     public function show($id)
