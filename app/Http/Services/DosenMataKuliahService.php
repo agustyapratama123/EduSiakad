@@ -63,4 +63,15 @@ class DosenMataKuliahService{
 
         return new DosenMataKuliahResource($data);
     }
+
+    function deleteData($id) {
+
+        $deleted = DB::table('dosen_mata_kuliah')->where('id', $id)->delete();
+
+        if ($deleted === 0) {
+            throw new DosenPengampuNotFoundException("dosen pengampu dengan ID {$id} tidak ditemukan atau gagal dihapus.");
+        }
+
+        return "data berhasil dihapus.";
+    }
 }

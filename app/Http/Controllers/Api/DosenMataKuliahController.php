@@ -7,10 +7,6 @@ use App\Exceptions\DosenPengampuNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DosenMataKuliahRequest;
 use App\Http\Services\DosenMataKuliahService;
-use App\Models\DosenMataKuliah;
-use App\Models\Dosen;
-use App\Models\MataKuliah;
-use Illuminate\Http\Request;
 
 class DosenMataKuliahController extends Controller
 {
@@ -25,73 +21,96 @@ class DosenMataKuliahController extends Controller
 
     public function index()
     {
-
         try {
-            
             $result = $this->DosenMataKuliahService->getAllData();
-            
+
+            return response()->json([
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
+        } catch (DosenMataKuliahNotFound $exception) {
+            return response()->json([
+                'status' => 404,
+                'error' => $exception->getMessage()
+            ], 404);
+
         } catch (\Exception $exception) {
-            $result = [
+            return response()->json([
                 'status' => 500,
                 'error' => $exception->getMessage()
-            ];
-        } catch(DosenMataKuliahNotFound $exception) {
-            $result = [
-                'status' => 500,
-                'error' => $exception->getMessage()
-            ];
+            ], 500);
         }
-        return response()->json([
-            'status' => 200,
-            'data' => $result
-        ]);
     }
 
-    public function store(DosenMataKuliahRequest $request)
+
+   public function store(DosenMataKuliahRequest $request)
     {
-        try{
+        try {
             $result = $this->DosenMataKuliahService->setDosenMataKuliahData($request);
-        }catch(\Exception $exception){
-            $result = [
+
+            return response()->json([
+                'status' => 201,
+                'data' => $result
+            ], 201);
+
+        } catch (\Exception $exception) {
+            return response()->json([
                 'status' => 500,
                 'error' => $exception->getMessage()
-            ];
+            ], 500);
         }
-
-        return response()->json($result,200);
-
     }
+
 
     public function show($id)
     {
-        try{
+        try {
             $result = $this->DosenMataKuliahService->getOneData($id);
-        }catch(\Exception $exception){
-            $result = [
-                'status' => 500,
-                'error' => $exception->getMessage()
-            ];
-        }catch(DosenPengampuNotFoundException $DosenPengampuNotFoundException){
-            $result = [
-                'status' => 500,
-                'error' => $DosenPengampuNotFoundException->getMessage()
-            ];
-        }
 
-        return response()->json([
-            'status' => 200,
-            'data' => $result
-        ]);
+            return response()->json([
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
+        } catch (DosenPengampuNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function destroy($id)
     {
-        $data = DosenMataKuliah::findOrFail($id);
-        $data->delete();
+        try {
+            $result = $this->DosenMataKuliahService->deleteData($id);
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Data dosen pengampu berhasil dihapus'
-        ]);
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data berhasil dihapus',
+                'data' => $result
+            ], 200);
+
+        } catch (DosenPengampuNotFoundException $e) {
+            return response()->json([
+                'status' => 500,
+                'error' => $e->getMessage()
+            ], 500);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 }
