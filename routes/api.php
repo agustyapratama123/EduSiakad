@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DosenController;
 use App\Http\Controllers\Api\DosenMataKuliahController;
 use Illuminate\Http\Request;
@@ -10,6 +11,14 @@ use App\Http\Controllers\Api\MataKuliahController;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+// Protected Routes (Butuh Token)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 Route::apiResource('mata-kuliah', MataKuliahController::class);
 Route::apiResource('dosen',DosenController::class);
