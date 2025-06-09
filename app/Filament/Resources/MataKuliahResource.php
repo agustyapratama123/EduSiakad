@@ -2,20 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DosenResource\Pages;
-use App\Filament\Resources\DosenResource\RelationManagers;
-use App\Models\Dosen;
+use App\Filament\Resources\MataKuliahResource\Pages;
+use App\Filament\Resources\MataKuliahResource\RelationManagers;
+use App\Models\MataKuliah;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DosenResource extends Resource
+class MataKuliahResource extends Resource
 {
-    protected static ?string $model = Dosen::class;
+    protected static ?string $model = MataKuliah::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -24,12 +26,14 @@ class DosenResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama'),
-                Forms\Components\TextInput::make('nidn')
-                                        ->numeric()
-                                        ->step(9),
-                Forms\Components\TextInput::make('email'),
-                Forms\Components\TextInput::make('telepon')
+                Forms\Components\TextInput::make('sks')
                                         ->numeric(),
+                Select::make('dosen')
+                    ->relationship('dosen', 'nama') // 'name' adalah kolom yang ditampilkan
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->columnSpanFull()
             ]);
     }
 
@@ -39,10 +43,13 @@ class DosenResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nidn')
+                Tables\Columns\TextColumn::make('sks')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('telepon'),
+                Tables\Columns\TextColumn::make('deskripsi'),
+                TextColumn::make('dosen.nama')
+                ->listWithLineBreaks()
+                ->limitList(3)
+                ->expandableLimitedList(),
             ])
             ->filters([
                 //
@@ -60,16 +67,16 @@ class DosenResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\MataKuliahRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDosens::route('/'),
-            'create' => Pages\CreateDosen::route('/create'),
-            'edit' => Pages\EditDosen::route('/{record}/edit'),
+            'index' => Pages\ListMataKuliahs::route('/'),
+            'create' => Pages\CreateMataKuliah::route('/create'),
+            'edit' => Pages\EditMataKuliah::route('/{record}/edit'),
         ];
     }
 }
