@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MataKuliah extends Model
 {
@@ -27,5 +28,11 @@ class MataKuliah extends Model
         return $this->belongsToMany(Dosen::class, 'dosen_mata_kuliah')
                     ->withTimestamps();
     }
+
+    public function jadwal(): HasMany
+    {
+        return $this->hasMany(Jadwal::class, 'mata_kuliah_id');
+    }
+
 
 }

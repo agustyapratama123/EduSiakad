@@ -25,15 +25,25 @@ class MataKuliahResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama'),
+                Forms\Components\TextInput::make('nama')
+                                        ->required(),
+                Forms\Components\TextInput::make('kode')
+                                        ->required(),
+                Forms\Components\TextInput::make('semester')
+                                        ->required(),
                 Forms\Components\TextInput::make('sks')
-                                        ->numeric(),
+                                        ->numeric()
+                                        ->required(),
+                Forms\Components\Textarea::make('deskripsi')
+                                        ->required(),
                 Select::make('dosen')
                     ->relationship('dosen', 'nama') // 'name' adalah kolom yang ditampilkan
                     ->multiple()
                     ->preload()
                     ->searchable()
                     ->columnSpanFull()
+                    ->required(),
+
             ]);
     }
 

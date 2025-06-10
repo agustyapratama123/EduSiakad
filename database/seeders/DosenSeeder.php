@@ -17,7 +17,7 @@ class DosenSeeder extends Seeder
     {
 
         $user = User::create([
-            'name' => 'Mahasiswa Satu',
+            'name' => 'Dosen A',
             'email' => 'dosen@example.com',
             'password' => Hash::make('password'),
             'role_id' => 3, // Role mahasiswa
