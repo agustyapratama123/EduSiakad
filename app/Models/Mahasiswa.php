@@ -23,4 +23,16 @@ class Mahasiswa extends Model
         'telepon',
         'user_id',
     ];
+
+    // Relasi ke dosen pembimbing
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class);
+    }
+
+    // Relasi ke user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
