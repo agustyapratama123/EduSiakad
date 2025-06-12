@@ -38,15 +38,14 @@ class DosenService {
 
     function setDosenData($request) {
 
-        // dd($request);
         return DB::transaction(function () use ($request) {
 
             // 1. Buat user
             $user = User::create([
                 'name'     => $request['nama'],
                 'email'    => $request['email'],
-                'password' => Hash::make('password_default123'), // atau generate acak
-                'role_id'  => 2, // contoh: 2 = dosen
+                'password' => Hash::make('password'), // atau generate acak
+                'role_id'  => 3, // contoh: 2 = dosen
                 'is_active'=> true,
             ]);
 

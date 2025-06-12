@@ -49,6 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(MahasiswaController::class)->group(function () {
         // Admin & dosen bisa lihat semua
         Route::get('/mahasiswa', 'index')->middleware('role:' . Role::ADMIN . ',' . Role::DOSEN);
+        Route::middleware('role:' . Role::ADMIN)->group(function () {
+                Route::post('/mahasiswa', 'store');
+                Route::put('/mahasiswa/{id}', 'update');
+                Route::delete('/mahasiswa/{id}', 'destroy');
+            });
         
         // Show: Admin (semua), Dosen (bimbingannya), Mahasiswa (hanya diri sendiri)
         Route::get('/mahasiswa/{mahasiswa}', 'show');

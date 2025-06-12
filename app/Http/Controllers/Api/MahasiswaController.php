@@ -3,46 +3,63 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MahasiswaRequest;
+use App\Http\Services\MahasiswaService;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MahasiswaController extends Controller
 {
-    // GET: /api/mahasiswa (Get All)
+
+    protected $MahasiswaService;
+
+    public function __construct(MahasiswaService $MahasiswaService){
+        $this->MahasiswaService = $MahasiswaService;
+    }
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $mahasiswas = Mahasiswa::all();
-        return response()->json([
-            'success' => true,
-            'data' => $mahasiswas
-        ], 200);
+        try {
+            $result = $this->MahasiswaService->getAllData();
+
+            return response()->json([
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'status' => 500,
+                'error' => $exception->getMessage()
+            ], 500);
+        }
     }
+    
 
     // POST: /api/mahasiswa (Create)
-    public function store(Request $request)
+    public function store(MahasiswaRequest $request)
     {
-        // Validasi
-        $validator = Validator::make($request->all(), [
-            'nama' => 'required|string|max:255',
-            'nim' => 'required|string|unique:mahasiswas,nim|max:20',
-            'jurusan' => 'required|string'
-        ]);
 
-        if ($validator->fails()) {
+        try {
+
+            $result = $this->MahasiswaService->setMahasiswaData($request);
+
             return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
+        }catch(\Throwable $e){
+            return response()->json([
+                        'status' => 200,
+                        'data' => $e->getMessage(),
+                    ], 200);
         }
 
-        // Create Data
-        $mahasiswa = Mahasiswa::create($request->all());
-
-        return response()->json([
-            'success' => true,
-            'data' => $mahasiswa
-        ], 201);
+        
     }
 
     // GET: /api/mahasiswa/{id} (Get by ID)
