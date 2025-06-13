@@ -82,5 +82,15 @@ class MahasiswaService {
         });
     }
 
+    function deleteData($id) {
+        $deleted = DB::table('mahasiswa')->where('id', $id)->delete();
+
+        if ($deleted === 0) {
+            throw new MahasiswaNotFoundException("mahasiswa tidak ditemukan");
+        }
+
+        return "data berhasil dihapus.";
+    }
+
     
 }

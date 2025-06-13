@@ -116,22 +116,28 @@ class MahasiswaController extends Controller
     }
 
     // DELETE: /api/mahasiswa/{id} (Delete)
-    public function destroy($id)
+    public function destroy(string $id)
     {
-        $mahasiswa = Mahasiswa::find($id);
+        try {
+            $data = $this->MahasiswaService->deleteData($id);
 
-        if (!$mahasiswa) {
             return response()->json([
-                'success' => false,
-                'message' => 'Data tidak ditemukan'
+                'status' => 200,
+                'message' => 'Data mahasiswa berhasil dihapus',
+                'data' => $data
+            ], 200);
+
+        } catch (MahasiswaNotFoundException $e) {
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
             ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $mahasiswa->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data berhasil dihapus'
-        ], 200);
     }
 }
