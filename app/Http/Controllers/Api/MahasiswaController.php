@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\MahasiswaNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MahasiswaRequest;
 use App\Http\Services\MahasiswaService;
@@ -31,6 +32,7 @@ class MahasiswaController extends Controller
             ], 200);
 
         } catch (\Exception $exception) {
+
             return response()->json([
                 'status' => 500,
                 'error' => $exception->getMessage()
@@ -64,19 +66,30 @@ class MahasiswaController extends Controller
     // GET: /api/mahasiswa/{id} (Get by ID)
     public function show($id)
     {
-        $mahasiswa = Mahasiswa::find($id);
 
-        if (!$mahasiswa) {
+        try{
+
+            $result = $this->MahasiswaService->getOneData($id);
+
+             return response()->json([
+                'status' => 200,
+                'data' => $result
+            ], 200);
+
+        }catch(MahasiswaNotFoundException $e){
+
             return response()->json([
-                'success' => false,
-                'message' => 'Data tidak ditemukan'
+                'status' => 404,
+                'message' => $e->getMessage(),
+            ], 404);
+        }catch(\Exception $e){
+
+            return response()->json([
+                'status' => 404,
+                'message' => $e->getMessage(),
             ], 404);
         }
-
-        return response()->json([
-            'success' => true,
-            'data' => $mahasiswa
-        ], 200);
+       
     }
 
     // PUT/PATCH: /api/mahasiswa/{id} (Update)

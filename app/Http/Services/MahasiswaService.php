@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Exceptions\MahasiswaNotFoundException;
 use App\Http\Resources\MahasiswaResource;
 use App\Models\Mahasiswa;
 use App\Models\Role;
@@ -47,6 +48,18 @@ class MahasiswaService {
 
             return new MahasiswaResource($mahasiswa);
         });
+    }
+
+    function getOneData($id) {
+
+        $mahasiswa = $mahasiswa = Mahasiswa::with('user')->find($id);
+        
+        if(!$mahasiswa){
+
+            throw new MahasiswaNotFoundException('mahasiswa not found by id '.$id);
+        }
+
+        return new MahasiswaResource($mahasiswa);
     }
 
     
