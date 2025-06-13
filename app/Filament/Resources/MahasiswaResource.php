@@ -77,4 +77,9 @@ class MahasiswaResource extends Resource
             'edit' => Pages\EditMahasiswa::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Akademik';
+    }
 }

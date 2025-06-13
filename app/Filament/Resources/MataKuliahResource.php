@@ -19,7 +19,7 @@ class MataKuliahResource extends Resource
 {
     protected static ?string $model = MataKuliah::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     public static function form(Form $form): Form
     {
@@ -88,5 +88,10 @@ class MataKuliahResource extends Resource
             'create' => Pages\CreateMataKuliah::route('/create'),
             'edit' => Pages\EditMataKuliah::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Akademik';
     }
 }

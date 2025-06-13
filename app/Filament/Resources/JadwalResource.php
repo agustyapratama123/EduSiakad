@@ -19,7 +19,7 @@ class JadwalResource extends Resource
 {
     protected static ?string $model = Jadwal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
     {
@@ -141,5 +141,10 @@ class JadwalResource extends Resource
             'create' => Pages\CreateJadwal::route('/create'),
             'edit' => Pages\EditJadwal::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Akademik';
     }
 }

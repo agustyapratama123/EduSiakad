@@ -17,7 +17,7 @@ class DosenResource extends Resource
 {
     protected static ?string $model = Dosen::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
     public static function form(Form $form): Form
     {
@@ -71,5 +71,10 @@ class DosenResource extends Resource
             'create' => Pages\CreateDosen::route('/create'),
             'edit' => Pages\EditDosen::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Akademik';
     }
 }
