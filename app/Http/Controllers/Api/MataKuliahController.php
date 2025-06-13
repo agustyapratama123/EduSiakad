@@ -71,10 +71,10 @@ class MataKuliahController extends Controller
             $data = $this->mataKuliahService->getOneData($id);
 
             return response()->json([
-                'status' => 200,
+                'status' => 201,
                 'message' => 'Data mata kuliah ditemukan',
                 'data' => $data,
-            ], 200);
+            ], 201);
 
         } catch (MataKuliahNotFoundException $e) {
             return response()->json([

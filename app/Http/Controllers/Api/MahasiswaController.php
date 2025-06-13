@@ -54,11 +54,10 @@ class MahasiswaController extends Controller
 
         }catch(\Throwable $e){
             return response()->json([
-                        'status' => 200,
-                        'data' => $e->getMessage(),
-                    ], 200);
+                'status' => 200,
+                'data' => $e->getMessage(),
+            ], 200);
         }
-
         
     }
 
