@@ -62,5 +62,25 @@ class MahasiswaService {
         return new MahasiswaResource($mahasiswa);
     }
 
+    function updateData($id,  $request) {
+        $data = $request->only(['nama', 'nim', 'email', 'id_prodi', 'tanggal_lahir', 'angkatan', 'alamat', 'telepon']);
+
+        $data['updated_at'] = now();
+
+        // Gunakan transaction untuk menjaga konsistensi data
+        return DB::transaction(function () use ($id, $data) {
+
+            $affected = Mahasiswa::where('id', $id)->update($data);
+
+            if ($affected === 0) {
+                throw new MahasiswaNotFoundException("Mahasiswa dengan ID {$id} tidak ditemukan atau tidak berubah.");
+            }
+
+            $mahasiswaUpdated = Mahasiswa::find($id);
+
+            return new MahasiswaResource($mahasiswaUpdated);
+        });
+    }
+
     
 }

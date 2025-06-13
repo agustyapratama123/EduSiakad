@@ -56,9 +56,10 @@ class MahasiswaController extends Controller
 
         }catch(\Throwable $e){
             return response()->json([
-                'status' => 200,
-                'data' => $e->getMessage(),
-            ], 200);
+                'status' => 500,
+                'message' => 'Gagal menyimpan data mahasiswa.',
+                'error' => $e->getMessage()
+            ], 500);
         }
         
     }
@@ -93,38 +94,25 @@ class MahasiswaController extends Controller
     }
 
     // PUT/PATCH: /api/mahasiswa/{id} (Update)
-    public function update(Request $request, $id)
+    public function update(MahasiswaRequest $request, $id)
     {
-        $mahasiswa = Mahasiswa::find($id);
 
-        if (!$mahasiswa) {
+        try{
+            $result = $this->MahasiswaService->updateData($id, $request);
+
             return response()->json([
-                'success' => false,
-                'message' => 'Data tidak ditemukan'
+                'status' => 200,
+                'message' => 'Data mahasiswa berhasil diperbarui',
+                'data' => $result,
+            ], 200);
+
+        }catch(MahasiswaNotFoundException $e){
+
+            return response()->json([
+                'status' => 404,
+                'error' => $e->getMessage()
             ], 404);
         }
-
-        // Validasi
-        $validator = Validator::make($request->all(), [
-            'nama' => 'sometimes|string|max:255',
-            'nim' => 'sometimes|string|unique:mahasiswas,nim,'.$id.'|max:20',
-            'jurusan' => 'sometimes|string'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        // Update Data
-        $mahasiswa->update($request->all());
-
-        return response()->json([
-            'success' => true,
-            'data' => $mahasiswa
-        ], 200);
     }
 
     // DELETE: /api/mahasiswa/{id} (Delete)
