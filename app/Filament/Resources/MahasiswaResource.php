@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Filament\Facades\Filament;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -52,7 +53,22 @@ class MahasiswaResource extends Resource
                 Tables\Columns\TextColumn::make('angkatan'),
             ])
             ->filters([
-                //
+                SelectFilter::make('jenis_kelamin')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'L' => 'Laki-laki',
+                        'P' => 'Perempuan',
+                    ]),
+
+                SelectFilter::make('angkatan')
+                    ->label('Angkatan')
+                    ->options(
+                        fn () => \App\Models\Mahasiswa::query()
+                            ->select('angkatan')
+                            ->distinct()
+                            ->pluck('angkatan', 'angkatan')
+                            ->toArray()
+                    ),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

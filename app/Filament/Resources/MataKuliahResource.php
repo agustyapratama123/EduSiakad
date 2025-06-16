@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MataKuliahResource\Pages;
 use App\Filament\Resources\MataKuliahResource\RelationManagers;
 use App\Models\MataKuliah;
+use App\Models\Role;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -69,7 +71,14 @@ class MataKuliahResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(function () {
+                        $user = Filament::auth()->user();  
+                        if($user->role_id == Role::ADMIN){
+                            return true;
+                        }
+                        
+                    })
                 ]),
             ]);
     }
