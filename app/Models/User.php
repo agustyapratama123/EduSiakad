@@ -64,4 +64,19 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+
+    public function isAdmin(): bool
+    {
+        return $this->role_id === Role::ADMIN;
+    }
+
+    public function isDosen(): bool
+    {
+        return $this->role_id === Role::DOSEN;
+    }
+
+    public function isMahasiswa(): bool
+    {
+        return $this->role_id === Role::MAHASISWA;
+    }
 }

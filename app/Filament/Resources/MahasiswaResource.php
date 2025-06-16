@@ -5,11 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MahasiswaResource\Pages;
 use App\Filament\Resources\MahasiswaResource\RelationManagers;
 use App\Models\Mahasiswa;
+use App\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -55,10 +59,18 @@ class MahasiswaResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(function () {
+                        $user = Filament::auth()->user();  
+                        if($user->role_id == Role::ADMIN){
+                            return true;
+                        }
+                        
+                    })
                 ]),
             ]);
     }
+    
 
     public static function getRelations(): array
     {
@@ -82,4 +94,6 @@ class MahasiswaResource extends Resource
     {
         return 'Akademik';
     }
+
+    
 }

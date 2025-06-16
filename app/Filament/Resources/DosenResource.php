@@ -5,11 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DosenResource\Pages;
 use App\Filament\Resources\DosenResource\RelationManagers;
 use App\Models\Dosen;
+use App\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Facades\Filament;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -52,7 +55,14 @@ class DosenResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(function () {
+                        $user = Filament::auth()->user();  
+                        if($user->role_id == Role::ADMIN){
+                            return true;
+                        }
+                        
+                    })
                 ]),
             ]);
     }

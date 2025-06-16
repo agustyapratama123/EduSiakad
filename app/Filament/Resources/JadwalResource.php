@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\JadwalResource\Pages;
 use App\Filament\Resources\JadwalResource\RelationManagers;
 use App\Models\Jadwal;
+use App\Models\Role;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -122,7 +124,14 @@ class JadwalResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(function () {
+                        $user = Filament::auth()->user();  
+                        if($user->role_id == Role::ADMIN){
+                            return true;
+                        }
+                        
+                    })
                 ]),
             ]);
     }

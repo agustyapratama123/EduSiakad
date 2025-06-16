@@ -62,4 +62,6 @@ class DashboardPanelProvider extends PanelProvider
                     ->collapsed(true), // Grup terbuka secara default
             ]);
     }
+
+    
 }

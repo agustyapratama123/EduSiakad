@@ -2,65 +2,34 @@
 
 namespace App\Policies;
 
-use App\Models\MataKuliah;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\MataKuliah;
+use App\Models\Role;
 
 class MataKuliahPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user)
     {
-        return true;
+        return in_array($user->role_id, [Role::ADMIN, Role::DOSEN, Role::MAHASISWA]);
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, MataKuliah $mataKuliah): bool
+    public function view(User $user, MataKuliah $mataKuliah)
     {
-        return true;
+        return in_array($user->role_id, [Role::ADMIN, Role::DOSEN, Role::MAHASISWA]);
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(User $user)
     {
-        return true;
+        return $user->role_id === Role::ADMIN;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, MataKuliah $mataKuliah): bool
+    public function update(User $user, MataKuliah $mataKuliah)
     {
-        return true;
+        return $user->role_id === Role::ADMIN;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, MataKuliah $mataKuliah): bool
+    public function delete(User $user, MataKuliah $mataKuliah)
     {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, MataKuliah $mataKuliah): bool
-    {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, MataKuliah $mataKuliah): bool
-    {
-        return true;
+        return $user->role_id === Role::ADMIN;
     }
 }
