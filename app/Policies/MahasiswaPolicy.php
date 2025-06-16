@@ -15,17 +15,17 @@ class MahasiswaPolicy
 
     public function view(User $user, Mahasiswa $mahasiswa)
     {
-        if ($user->role_id === Role::ADMIN) {
+        if ($user->role_id == Role::ADMIN) {
             return true;
         }
 
-        if ($user->role_id === Role::DOSEN) {
+        if ($user->role_id == Role::DOSEN) {
             // Asumsi: Mahasiswa punya relasi dosen_id
-            return $mahasiswa->dosen_id === $user->id;
+            return $mahasiswa->dosen_id == $user->id;
         }
 
-        if ($user->role_id === Role::MAHASISWA) {
-            return $mahasiswa->user_id === $user->id;
+        if ($user->role_id == Role::MAHASISWA) {
+            return $mahasiswa->user_id == $user->id;
         }
 
         return false;
@@ -33,16 +33,16 @@ class MahasiswaPolicy
 
     public function create(User $user)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 
     public function update(User $user, Mahasiswa $mahasiswa)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 
     public function delete(User $user, Mahasiswa $mahasiswa)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 }

@@ -20,16 +20,16 @@ class MataKuliahPolicy
 
     public function create(User $user)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 
     public function update(User $user, MataKuliah $mataKuliah)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 
     public function delete(User $user, MataKuliah $mataKuliah)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 }

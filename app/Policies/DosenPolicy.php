@@ -20,16 +20,16 @@ class DosenPolicy
 
     public function create(User $user)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 
     public function update(User $user, Dosen $dosen)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 
     public function delete(User $user, Dosen $dosen)
     {
-        return $user->role_id === Role::ADMIN;
+        return $user->role_id == Role::ADMIN;
     }
 }
