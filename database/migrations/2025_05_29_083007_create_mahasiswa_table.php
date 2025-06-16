@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('id_prodi')->constrained('prodi')->cascadeOnDelete(); // Hanya untuk unsignedBigInteger
             $table->date('tanggal_lahir');
             $table->year('angkatan');
+            $table->string('jenis_kelamin');
             $table->string('alamat');
             $table->string('telepon');
             $table->string('user_id'); // foreign key ke tabel users
